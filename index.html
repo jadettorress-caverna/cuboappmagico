@@ -1465,7 +1465,17 @@ function atualizarPromptTopicos(){
 function copiarPromptTopicos(){
   const assunto = document.getElementById('top-assunto')?.value.trim();
   if(!assunto){ notif('Digite seu assunto principal primeiro'); return; }
-  const prompt = `De acordo com meu assunto principal que é ${assunto}, me entregue 12 tópicos que serão a estrutura da minha comunicação no digital. Cada tópico deve ter no máximo 2 palavras — são tópicos estruturais, não temas.`;
+  const nome = document.getElementById('id-nome')?.value.trim() || dados['id-nome'] || '[QUEM SOU EU]';
+  const oQueFaz = document.getElementById('id-assunto')?.value.trim() || dados['id-assunto'] || '[O QUE EU FAÇO]';
+  const paraQuem = document.getElementById('id-paraquem')?.value.trim() || dados['id-paraquem'] || '[PARA QUEM EU FAÇO]';
+  const causa = document.getElementById('id-causa')?.value.trim() || dados['id-causa'] || '[QUAL MINHA CAUSA]';
+  const prompt = `Sou ${nome}. Trabalho com ${oQueFaz}. Meu público principal é ${paraQuem}. Minha causa é ${causa}.
+
+Com base no meu trabalho e na minha causa, me entregue 12 tópicos estruturais que representam os pilares permanentes da minha comunicação no digital — os territórios de conhecimento, método e expertise que só eu posso ocupar com autoridade.
+
+Esses tópicos devem refletir a estrutura do meu trabalho — não temas genéricos da minha área, mas os territórios específicos onde minha metodologia e visão de mundo se manifestam.
+
+IMPORTANTE: Cada tópico deve ter no máximo 2 palavras — são pilares estruturais, não temas. Não entregue conceitos amplos que qualquer expert do meu nicho usaria. Me entregue numerados de 1 a 12.`;
   copiarTexto(prompt);
   document.getElementById('prompt-topicos-preview').textContent = prompt;
   const _ptp2=document.getElementById('prompt-topicos-preview'); if(_ptp2) _ptp2.style.display='block';
@@ -1879,11 +1889,14 @@ function atualizarPromptTopicosAudiencia(){
   const preview = document.getElementById('prompt-topicos-audiencia-preview');
   if(!preview) return;
   if(!assunto){ preview.textContent='Preencha sua Identidade para gerar o prompt...'; return; }
-  const prompt = `Sou ${nome} e trabalho com ${assunto}.${paraquem?' Meu público principal é: '+paraquem+'.':''}
+  const causa = dados['id-causa']||'';
+  const prompt = `Sou ${nome}. Trabalho com ${assunto}. Meu público principal é ${paraquem}. Minha causa é ${causa}.
 
-Com base no Mapa Psicoemocional da minha persona, me entregue 12 tópicos que representam os aspectos emocionais mais relevantes dela — seus sonhos, medos, culpas, suspeitas e inimigos internos e externos.
+Com base nos 5 pilares do mapa psicoemocional da minha persona — Sonhos, Medos, Culpas, Suspeitas e Inimigos — me entregue 12 territórios emocionais estruturais que representam o universo interno dela.
 
-IMPORTANTE: Cada tópico deve ter no máximo 2 palavras — são tópicos estruturais, não temas. Me entregue numerados de 1 a 12.`;
+Cada território deve nomear um espaço emocional permanente, não um tema pontual. Pense em territórios que existem na vida dela independente do momento — tensões que ela carrega, desejos que não passam, crenças que a travam.
+
+IMPORTANTE: Cada território deve ter no máximo 2 palavras — são pilares estruturais, não temas. Distribua os 12 territórios entre os 5 pilares. Me entregue numerados de 1 a 12.`;
   preview.textContent = prompt;
   preview.style.fontStyle='normal';
   preview.style.color='var(--texto)';
@@ -1956,11 +1969,14 @@ function atualizarPromptTopicosTerritorios(){
   const preview = document.getElementById('prompt-topicos-territorios-preview');
   if(!preview) return;
   if(!assunto){ preview.textContent='Preencha sua Identidade para gerar o prompt...'; return; }
-  const prompt = `Sou ${nome} e trabalho com ${assunto}.${paraquem?' Meu público principal é: '+paraquem+'.':''}${causa?' Minha causa é: '+causa+'.':''}
+  const porque = dados['id-porque']||'';
+  const prompt = `Sou ${nome}. Trabalho com ${assunto}. Meu público principal é ${paraquem}. Por que eu faço isso: ${porque}.
 
-Com base nos 5 pilares de conexão emocional (Sonhos, Medos, Culpas, Suspeitas e Inimigos da minha persona), me entregue 12 territórios temáticos que meu conteúdo deve ocupar — espaços estratégicos de comunicação que criam conexão profunda com minha audiência.
+Com base nos pontos de encontro entre a minha história pessoal e a jornada emocional da minha persona — momentos de virada, recomeço, transição, identidade e pertencimento — me entregue 12 territórios de conexão humana que meu conteúdo deve ocupar.
 
-IMPORTANTE: Cada território deve ter no máximo 2 palavras — são territórios estruturais, não temas. Me entregue numerados de 1 a 12.`;
+Esses territórios são os espaços onde minha vivência encontra a dela. Não são sobre o meu método nem sobre a dor isolada dela — são sobre o que nos conecta humanamente.
+
+IMPORTANTE: Cada território deve ter no máximo 2 palavras — são pilares estruturais, não temas. Não repita territórios que pertencem ao método ou à dor isolada da persona. Me entregue numerados de 1 a 12.`;
   preview.textContent = prompt;
   preview.style.fontStyle='normal';
   preview.style.color='var(--texto)';
