@@ -1426,8 +1426,8 @@ function gerarDossie(){
 
   dossieModal.innerHTML = `
     <div style="display:flex;gap:10px;margin-bottom:16px;position:sticky;top:0;z-index:10">
-      <button onclick="document.body.classList.add('print-dossie');window.print();setTimeout(()=>document.body.classList.remove('print-dossie'),1000)" style="background:#1B7FD4;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">🖨️ Imprimir / Salvar PDF</button>
-      <button onclick="document.getElementById('modal-dossie') && document.getElementById('modal-dossie').style.display='none'" style="background:#fff;color:#0A1628;border:1px solid #ccc;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer">✕ Fechar</button>
+      <button onclick="document.body.classList.add('print-dossie');var _ap=function(){document.body.classList.remove('print-dossie');window.removeEventListener('afterprint',_ap);};window.addEventListener('afterprint',_ap);window.print();" style="background:#1B7FD4;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">🖨️ Imprimir / Salvar PDF</button>
+      <button onclick="document.body.classList.remove('print-dossie');var m=document.getElementById('modal-dossie');if(m){m.style.display='none';}" style="background:#fff;color:#0A1628;border:1px solid #ccc;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer">✕ Fechar</button>
     </div>
     <div id="dossie-conteudo" style="background:#fff;width:210mm;box-shadow:0 4px 40px rgba(0,0,0,.3)">
       ${html}
@@ -2406,7 +2406,7 @@ function gerarRelatorioRoteiros(rodadaId){
     <div style="position:sticky;top:0;background:#fff;border-bottom:2px solid #eee;padding:12px 24px;display:flex;align-items:center;gap:12px;z-index:1">
       <button onclick="document.getElementById('${modalId}').style.display='none'" style="padding:8px 16px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:13px">✕ Fechar</button>
       <span style="font-size:14px;font-weight:700;color:#1a1a2e">📄 Relatório de Roteiros — ${rodada.nome}</span>
-      <button onclick="document.body.classList.add('print-relatorio');window.print();setTimeout(()=>document.body.classList.remove('print-relatorio'),1000)" style="margin-left:auto;padding:8px 20px;border:none;border-radius:6px;background:#1B7FD4;color:#fff;cursor:pointer;font-size:13px;font-weight:700">🖨️ Imprimir / Salvar PDF</button>
+      <button onclick="document.body.classList.add('print-relatorio');var _ar=function(){document.body.classList.remove('print-relatorio');window.removeEventListener('afterprint',_ar);};window.addEventListener('afterprint',_ar);window.print();" style="margin-left:auto;padding:8px 20px;border:none;border-radius:6px;background:#1B7FD4;color:#fff;cursor:pointer;font-size:13px;font-weight:700">🖨️ Imprimir / Salvar PDF</button>
     </div>
     <div id="relatorio-conteudo" style="padding:40px;max-width:800px;margin:0 auto">
       ${html.match(/<body>([\s\S]*)<\/body>/)?.[1]||''}
