@@ -1568,9 +1568,13 @@ Esses temas são para conteúdos que educam, mostram autoridade e despertam o in
 REGRA: Para cada um dos 12 tópicos, sugira 1 tema que ensine algo relevante do ponto de vista do meu método e da minha visão — não uma dica genérica da área, mas uma perspectiva que só eu teria baseada na minha experiência e metodologia. O tema deve despertar curiosidade e vontade de aprender mais.`,
 
   relacionar:`OBJETIVO: RELACIONAR — Meio de funil
-Esses temas são para conteúdos que posicionam, dão opinião e geram conexão genuína. A pessoa lê e pensa "ela pensa como eu" ou "nunca tinha pensado assim". São temas de ponto de vista, posicionamento pessoal e reflexão.
+Esses temas são para conteúdos que posicionam, dão opinião e geram conexão genuína. A pessoa lê e pensa "ela pensa como eu" ou "nunca tinha pensado assim". São temas de ponto de vista, posicionamento pessoal e reflexão — que nascem da vivência de quem fala, não do método que ensina.
 
-REGRA: Para cada um dos 12 tópicos, sugira 1 tema que expresse uma opinião clara, questione uma crença comum ou provoque uma reflexão que a audiência ainda não teve sobre aquele tópico. O ponto de vista deve ser autoral — baseado na experiência real de quem fala, não em tendências do mercado. Deve soar como algo que só essa pessoa diria, a partir do que viveu e do que acredita.`,
+REGRA: Para cada um dos 12 tópicos, sugira 1 tema que expresse uma opinião clara, questione uma crença comum ou provoque uma reflexão que a audiência ainda não teve sobre aquele tópico. O ponto de vista deve ser autoral — baseado na experiência real de quem fala, no que viveu e no que acredita. Deve soar como algo que só essa pessoa diria.
+
+ATENÇÃO: Cada tema deve ter entre 6 e 15 palavras — uma linha com gancho, sem desenvolvimento, sem parágrafo. Identifique o eixo entre parênteses: (OPINIÃO), (PROVOCAÇÃO) ou (REFLEXÃO).
+
+Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha.`,
 
   ofertar:`OBJETIVO: OFERTAR — Fundo de funil
 Esses temas são para conteúdos que quebram objeções, mostram resultados e preparam a decisão de compra. A pessoa lê e pensa "isso resolve o meu problema" ou "quero esse resultado". São temas que partem de uma história real de transformação — a minha ou da minha aluna — e mostram que existe um caminho estruturado para chegar lá.
@@ -1653,7 +1657,7 @@ function selecionarObjetivoTema(objetivo, el){
   const INDICADO = {
     atrair:    'audiencia',
     envolver:  'metodo',
-    relacionar:'metodo',
+    relacionar:'territorios',
     ofertar:   'territorios',
     fidelizar: 'audiencia',
     humanizar: 'territorios'
@@ -1707,6 +1711,10 @@ function selecionarObjetivoTema(objetivo, el){
 ATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`
     : objetivo === 'humanizar'
     ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema] (MOMENTO PESSOAL)\n2. [tema] (TENDÊNCIA/MERCADO)\n...
+
+ATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`
+    : objetivo === 'relacionar'
+    ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema] (OPINIÃO)\n2. [tema] (PROVOCAÇÃO)\n...
 
 ATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`
     : `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema]\n2. [tema]\n...
