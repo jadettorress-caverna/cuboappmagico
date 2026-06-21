@@ -1495,7 +1495,9 @@ Formato de entrega — repita essa estrutura para os 12 tópicos, separados por 
 Definição: [frase]
 Fala sobre: [palavra, palavra, palavra]
 Pergunta central: "[pergunta]"
-────────────────────`;
+────────────────────
+
+Não escreva uma lista simples antes — entregue direto nesse formato estruturado, uma única vez, sem repetir os tópicos em outro formato antes ou depois.`;
   copiarTexto(prompt);
   document.getElementById('prompt-topicos-preview').textContent = prompt;
   const _ptp2=document.getElementById('prompt-topicos-preview'); if(_ptp2) _ptp2.style.display='block';
@@ -1702,6 +1704,19 @@ function montarListaTopicosComPergunta(topicos, detalhes){
 // Quebra o texto colado em blocos de tópico estruturado (Nome / Definição / Fala sobre / Pergunta central),
 // separados por uma linha de travessões. Se não achar blocos, cai no modo simples (1 linha = 1 tópico).
 function parseTopicosEstruturados(texto){
+  // Se a IA repetiu uma lista simples antes do formato estruturado, descarta esse trecho duplicado.
+  const marcador = texto.search(/defini[cç][aã]o\s*:|fala sobre\s*:|pergunta central\s*:/i);
+  if(marcador !== -1){
+    const antes = texto.slice(0, marcador);
+    const linhasAntes = antes.split('\n');
+    let idxTitulo = -1;
+    for(let i=linhasAntes.length-1;i>=0;i--){
+      if(/^\s*\d+[\.\)\-\s]+\S/.test(linhasAntes[i])){ idxTitulo = i; break; }
+    }
+    if(idxTitulo > 0){
+      texto = linhasAntes.slice(idxTitulo).join('\n') + texto.slice(marcador);
+    }
+  }
   let blocos = texto.split(/\n\s*[─\-—]{3,}\s*\n/).map(b=>b.trim()).filter(Boolean);
   if(blocos.length<=1){
     const linhas = texto.split('\n')
@@ -2070,7 +2085,9 @@ Formato de entrega — repita essa estrutura para os 12 territórios, separados 
 Definição: [frase]
 Fala sobre: [palavra, palavra, palavra]
 Pergunta central: "[pergunta]"
-────────────────────`;
+────────────────────
+
+Não escreva uma lista simples antes — entregue direto nesse formato estruturado, uma única vez, sem repetir os tópicos em outro formato antes ou depois.`;
   preview.textContent = prompt;
   preview.style.fontStyle='normal';
   preview.style.color='var(--texto)';
@@ -2166,7 +2183,9 @@ Formato de entrega — repita essa estrutura para os 12 territórios, separados 
 Definição: [frase]
 Fala sobre: [palavra, palavra, palavra]
 Pergunta central: "[pergunta]"
-────────────────────`;
+────────────────────
+
+Não escreva uma lista simples antes — entregue direto nesse formato estruturado, uma única vez, sem repetir os tópicos em outro formato antes ou depois.`;
   preview.textContent = prompt;
   preview.style.fontStyle='normal';
   preview.style.color='var(--texto)';
