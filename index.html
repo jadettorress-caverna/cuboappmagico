@@ -2421,7 +2421,7 @@ function renderProdObjetivos(){
     const estoques = rodadas.filter(r=>r.objetivo===key);
     const corBarra = CORES_OBJETIVO[key] || 'var(--azul)';
     return `
-      <div onclick="abrirObjetivo('${key}')" style="background:var(--branco);border:2px solid ${cfg.borderColor||"var(--cinza-borda)"};border-radius:var(--r-lg);padding:24px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)" 
+      <div onclick="abrirObjetivo('${key}', true)" style="background:var(--branco);border:2px solid ${cfg.borderColor||"var(--cinza-borda)"};border-radius:var(--r-lg);padding:24px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)" 
         onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.12)'"
         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='var(--shadow)'">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
@@ -2447,10 +2447,11 @@ function renderProdObjetivos(){
   }).join('');
 }
 
-function abrirObjetivo(objetivo){
+function abrirObjetivo(objetivo, pularSeUnico){
   const cfg = OBJ_CONFIG[objetivo];
   if(!cfg){ notif('Objetivo não encontrado: '+objetivo); return; }
   const estoques = rodadas.filter(r=>r.objetivo===objetivo);
+
   document.getElementById('prod-objetivos-grid').style.display='none';
   document.getElementById('prod-objetivo-detalhe').style.display='block';
   document.getElementById('prod-conteudo').innerHTML='';
@@ -2491,6 +2492,12 @@ function abrirObjetivo(objetivo){
       </div>
     `;
   }).join('');
+
+  // Lista já montada (serve pro breadcrumb "voltar"). Se só tem 1 estoque e
+  // veio de um clique direto no card do objetivo, pula direto pra ele.
+  if(estoques.length === 1 && pularSeUnico){
+    carregarEstoqueProducao(estoques[0].id);
+  }
 }
 
 function irParaGerarEstoque(objetivo){
