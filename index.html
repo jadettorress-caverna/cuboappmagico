@@ -665,9 +665,14 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 
     <!-- ══ PRODUÇÃO ══ -->
     <div id="panel-producao" class="panel">
-      <div class="page-header">
-        <div class="page-title">Produzir</div>
-        <div class="page-sub">Acompanhe e gerencie sua produção por objetivo</div>
+      <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <div class="page-title">Produzir</div>
+          <div class="page-sub">Acompanhe e gerencie sua produção por objetivo</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="exportarLinhaEditorial()" style="white-space:nowrap">
+          🤖 Exportar Linha Editorial para o Claude
+        </button>
       </div>
 
       <!-- TEXTO EXPLICATIVO -->
@@ -4963,6 +4968,110 @@ function entrar(){
   document.getElementById('splash').style.display='none';
   document.getElementById('app').style.display='flex';
   inicializar();
+}
+
+function exportarLinhaEditorial(){
+  const d = dados;
+
+  // ── IDENTIDADE ──
+  const nome = d['id-nome']||'';
+  const oQueFaz = d['id-assunto']||d['top-assunto']||'';
+  const paraQuem = d['id-paraquem']||'';
+  const como = d['id-como']||'';
+  const causa = d['id-causa']||'';
+  const porque = d['id-porque']||'';
+
+  // ── TÓPICOS ──
+  const topMetodo = d.topicos||Array(12).fill('');
+  const topAudiencia = d.topicosAudiencia||Array(12).fill('');
+  const topTerritorios = d.topicosTerritorios||Array(12).fill('');
+  const detMetodo = d.topicosDetalhe||Array(12).fill(null);
+  const detAudiencia = d.topicosAudienciaDetalhe||Array(12).fill(null);
+  const detTerritorios = d.topicosTerritoriosDetalhe||Array(12).fill(null);
+
+  const toTitleCase = str => str
+    ? str.toLowerCase().replace(/(?:^|\s|-)\S/g, c => c.toUpperCase())
+    : str;
+
+  const formatarTopico = (nome, det, idx) => {
+    if(!nome) return `${idx+1}. (não preenchido)`;
+    const nomeFmt = toTitleCase(nome);
+    const def = det?.definicao ? ` — ${det.definicao}` : '';
+    const fala = det?.falaSobre ? ` | Fala sobre: ${det.falaSobre}` : '';
+    const perg = det?.pergunta ? ` | Pergunta central: "${det.pergunta}"` : '';
+    return `${idx+1}. **${nomeFmt}**${def}${fala}${perg}`;
+  };
+
+  // ── TEMAS ──
+  const OBJETIVOS = ['atrair','envolver','relacionar','ofertar','fidelizar','humanizar'];
+  const NOMES_OBJ = {atrair:'Atrair',envolver:'Envolver',relacionar:'Relacionar',ofertar:'Ofertar',fidelizar:'Fidelizar',humanizar:'Humanizar'};
+
+  const secoesTopicos = OBJETIVOS.map(obj => {
+    const temas = d['temas_'+obj]||[];
+    const temasPreenchidos = temas.filter(t=>t&&t.trim());
+    if(!temasPreenchidos.length) return '';
+    return `### ${NOMES_OBJ[obj]}
+${temas.map((t,i)=>`${i+1}. ${t||'(não preenchido)'}`).join('\n')}`;
+  }).filter(Boolean).join('\n\n');
+
+  // ── MONTA O MARKDOWN ──
+  const md = `# Linha Editorial — ${nome||'[Nome]'}
+
+Arquivo de identidade editorial para uso no Projeto Cubo Mágico no Claude.
+Gerado automaticamente pelo app Cubo Mágico em ${new Date().toLocaleDateString('pt-BR')}.
+
+---
+
+## 1. Identidade
+
+**Quem sou eu:** ${nome||'—'}
+
+**O que eu faço:** ${oQueFaz||'—'}
+
+**Para quem eu faço:** ${paraQuem||'—'}
+
+**Como eu faço:** ${como||'—'}
+
+**Qual minha causa:** ${causa||'—'}
+
+**Por que eu faço:** ${porque||'—'}
+
+---
+
+## 2. Tópicos do Assunto Principal
+
+${topMetodo.map((t,i)=>formatarTopico(t,detMetodo[i],i)).join('\n')}
+
+---
+
+## 3. Tópicos da Persona
+
+${topAudiencia.map((t,i)=>formatarTopico(t,detAudiencia[i],i)).join('\n')}
+
+---
+
+## 4. Tópicos de Conexão Emocional
+
+${topTerritorios.map((t,i)=>formatarTopico(t,detTerritorios[i],i)).join('\n')}
+
+---
+
+## 5. Temas por Objetivo
+
+${secoesTopicos||'Nenhum tema gerado ainda. Gere os temas na aba Montar Cubo e exporte novamente.'}
+`;
+
+  // ── BAIXA O ARQUIVO ──
+  const blob = new Blob([md], {type:'text/markdown;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `linha-editorial-${(nome||'cubo-magico').toLowerCase().replace(/\s+/g,'-')}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  notif('✅ Linha Editorial exportada! Suba o arquivo no seu Projeto do Claude.');
 }
 
 function gerarCronogramaProducao(rodadaId){
