@@ -1243,6 +1243,7 @@ function distribuirRespostaAudiencia(){
 }
 
 function gerarDossie(){
+  dados = JSON.parse(localStorage.getItem('cubo_dados')||'{}');
   const d = dados;
   const nome = d['id-nome']||'—';
   const data = new Date().toLocaleDateString('pt-BR');
