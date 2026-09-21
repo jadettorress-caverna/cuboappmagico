@@ -460,6 +460,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 
       <div style="display:flex;justify-content:flex-end">
         <button class="btn btn-primary btn-lg" onclick="gerarDossie()">📄 Baixar meu Dossiê Editorial</button>
+        <button class="btn btn-ghost btn-sm" onclick="abrirSubstituicaoTermos()" title="Substituir um termo em todos os seus dados">🔄 Substituir termo</button>
       </div>
     </div>
 
@@ -5279,6 +5280,74 @@ function entrar(){
   document.getElementById('splash').style.display='none';
   document.getElementById('app').style.display='flex';
   inicializar();
+}
+
+function substituirTermoGlobal(termoBusca, termoNovo){
+  if(!termoBusca || !termoNovo) return;
+  const d = JSON.parse(localStorage.getItem('cubo_dados')||'{}');
+  let count = 0;
+
+  const substituir = (val) => {
+    if(typeof val !== 'string') return val;
+    const regex = new RegExp(termoBusca.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+    const novo = val.replace(regex, termoNovo);
+    if(novo !== val) count++;
+    return novo;
+  };
+
+  // Substitui em todos os campos de texto do dados
+  for(const key in d){
+    if(typeof d[key] === 'string'){
+      d[key] = substituir(d[key]);
+    } else if(Array.isArray(d[key])){
+      d[key] = d[key].map(v => substituir(v));
+    }
+  }
+
+  localStorage.setItem('cubo_dados', JSON.stringify(d));
+  dados = d;
+
+  // Recarrega campos visíveis
+  if(document.getElementById('id-assunto')) document.getElementById('id-assunto').value = d['id-assunto']||'';
+  if(document.getElementById('top-assunto')) document.getElementById('top-assunto').value = d['top-assunto']||'';
+  renderTopicos();
+  renderTopicosAudiencia();
+  renderTopicosTerritorios();
+
+  notif(`✅ Substituído "${termoBusca}" por "${termoNovo}" — ${count} ocorrência(s) encontrada(s) nos seus dados.`);
+  return count;
+}
+
+function abrirSubstituicaoTermos(){
+  const modal = document.createElement('div');
+  modal.id = 'modal-substituicao';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:32px;width:480px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,.2)">
+      <div style="font-size:18px;font-weight:700;color:var(--azul-dark);margin-bottom:8px">🔄 Substituir termo nos seus dados</div>
+      <div style="font-size:13px;color:var(--cinza);margin-bottom:24px">Substitui em todos os seus campos: Assunto Principal, temas, tópicos e qualquer texto salvo.</div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:12px;font-weight:600;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px">Termo atual</label>
+        <input id="subst-busca" class="form-input" style="margin-top:6px" placeholder="ex: patrimônio intelectual">
+      </div>
+      <div style="margin-bottom:24px">
+        <label style="font-size:12px;font-weight:600;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px">Substituir por</label>
+        <input id="subst-novo" class="form-input" style="margin-top:6px" placeholder="ex: capital intelectual">
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button onclick="document.getElementById('modal-substituicao').remove()" style="background:transparent;border:1px solid var(--cinza-borda);padding:10px 20px;border-radius:8px;cursor:pointer">Cancelar</button>
+        <button onclick="
+          const busca = document.getElementById('subst-busca').value.trim();
+          const novo = document.getElementById('subst-novo').value.trim();
+          if(!busca||!novo){ alert('Preencha os dois campos.'); return; }
+          substituirTermoGlobal(busca, novo);
+          document.getElementById('modal-substituicao').remove();
+        " style="background:var(--azul);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-weight:600;cursor:pointer">Substituir</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.getElementById('subst-busca').focus();
 }
 
 function exportarTopicosConjunto(conjunto){
