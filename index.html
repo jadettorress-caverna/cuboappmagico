@@ -2754,7 +2754,17 @@ function voltarEstoques(objetivo){
 function gerarPromptProducao(idx, rodadaId){
   const rodada = rodadas.find(r=>r.id==rodadaId);
   const temas = (typeof rodada !== 'undefined' && rodada && dados['temas_'+rodada.objetivo]) || dados.temas || Array(12).fill('');
-  const topicos = dados.topicos || Array(12).fill('');
+
+  // Resolve tópico dinamicamente pelo conjunto de afinidade do objetivo
+  const INDICADO_CONJUNTO = {
+    atrair:'audiencia', envolver:'metodo', relacionar:'territorios',
+    ofertar:'metodo', fidelizar:'audiencia', humanizar:'audiencia'
+  };
+  const conjunto = rodada ? (INDICADO_CONJUNTO[rodada.objetivo]||'metodo') : 'metodo';
+  const topicos = conjunto==='audiencia' ? (dados.topicosAudiencia||Array(12).fill(''))
+    : conjunto==='territorios' ? (dados.topicosTerritorios||Array(12).fill(''))
+    : (dados.topicos||Array(12).fill(''));
+
   const tema = temas[idx] || '';
   const topico = topicos[idx] || '';
   const conteudo = tema || topico || `Tema ${idx+1}`;
@@ -5207,7 +5217,17 @@ function salvarFicha(){
 
 function gerarPromptTexto(idx, rodada){
   const temas = (typeof rodada !== 'undefined' && rodada && dados['temas_'+rodada.objetivo]) || dados.temas || Array(12).fill('');
-  const topicos = dados.topicos || Array(12).fill('');
+
+  // Busca o tópico dinamicamente pelo conjunto de afinidade do objetivo (nunca copia o nome estaticamente)
+  const INDICADO_CONJUNTO = {
+    atrair:'audiencia', envolver:'metodo', relacionar:'territorios',
+    ofertar:'metodo', fidelizar:'audiencia', humanizar:'audiencia'
+  };
+  const conjunto = rodada ? (INDICADO_CONJUNTO[rodada.objetivo]||'metodo') : 'metodo';
+  const topicos = conjunto==='audiencia' ? (dados.topicosAudiencia||Array(12).fill(''))
+    : conjunto==='territorios' ? (dados.topicosTerritorios||Array(12).fill(''))
+    : (dados.topicos||Array(12).fill(''));
+
   const tema = temas[idx] || '';
   const topico = topicos[idx] || '';
   const conteudo = tema || topico || 'Tema '+(idx+1);
