@@ -4856,6 +4856,7 @@ function renderBancoModelos(){
               <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px">
                 <span class="modelo-nome">${m.nome}</span>
                 ${m.funil?`<span class="badge-funil badge-${m.funil}" style="font-size:9px">${m.funil==='topo'?'Topo':m.funil==='meio'?'Meio':'Fundo'}</span>`:''}
+                ${m.tipoModelo==='estilo-visual'?`<span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#EEF2FF;color:#4338CA;font-weight:700;border:1px solid #C7D2FE">🎬 Estilo Visual</span>`:''}
                 ${m.intencao?`<span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#F5F5F5;color:var(--cinza);font-weight:600;border:1px solid var(--cinza-borda)">${m.intencao}</span>`:''}
                 ${m.formato?`<span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#FFF7ED;color:#C2410C;font-weight:600;border:1px solid #FED7AA">${m.formato}</span>`:''}\`
                 <span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#FEF9E7;color:#B8860B;font-weight:700;border:1px solid #F5C400">✨ Autoral</span>
@@ -4895,6 +4896,7 @@ function renderBancoModelos(){
                   if(fu==='humanizar') return `<span style="font-size:9px;padding:2px 8px;border-radius:8px;background:${obj.bg};color:${obj.cor};font-weight:700;border:1px solid ${obj.borda}">Livre</span>`;
                   return '';
                 }).filter((v,i,a)=>a.indexOf(v)===i).join(''):''}
+                ${m.tipoModelo==='estilo-visual'?`<span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#EEF2FF;color:#4338CA;font-weight:700;border:1px solid #C7D2FE">🎬 Estilo Visual</span>`:''}
                 ${m.intencao?`<span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#F5F5F5;color:var(--cinza);font-weight:600;border:1px solid var(--cinza-borda)">${m.intencao}</span>`:''}
                 ${m.formato?`<span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#FFF7ED;color:#C2410C;font-weight:600;border:1px solid #FED7AA">${m.formato}</span>`:''}\`
                 ${(()=>{
@@ -5261,7 +5263,7 @@ function gerarPromptTexto(idx, rodada){
   const ctaFicha = document.getElementById('ficha-cta')?.value || rodada.cta || '';
   if(ctaFicha) prompt += `\nCTA definida: ${ctaFicha}`;
 
-  // Modelo da ficha técnica
+  // Gancho selecionado na ficha técnica
   const modeloId = document.getElementById('ficha-gancho')?.value;
   if(modeloId){
     let modeloObj = null;
@@ -5272,6 +5274,19 @@ function gerarPromptTexto(idx, rodada){
     if(!modeloObj) modeloObj = meusModelos.find(m=>m.id===modeloId);
     if(modeloObj?.prompt||modeloObj?.estrutura){
       prompt += `\n\nESTRUTURA DO ROTEIRO — ${modeloObj.nome}:\n${modeloObj.prompt||modeloObj.estrutura}`;
+    }
+  }
+
+  // Estilo Visual selecionado na ficha técnica
+  const estiloId = document.getElementById('ficha-estilo-visual')?.value;
+  if(estiloId){
+    let estiloObj = null;
+    for(const f of FORMATOS_MODELOS){
+      estiloObj = f.modelos.find(m=>m.id===estiloId && m.tipoModelo==='estilo-visual');
+      if(estiloObj) break;
+    }
+    if(estiloObj?.prompt){
+      prompt += `\n\nESTILO VISUAL — ${estiloObj.nome}:\n${estiloObj.prompt}`;
     }
   }
 
