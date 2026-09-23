@@ -5247,6 +5247,7 @@ function gerarPromptTexto(idx, rodada){
   if(posicionamento) prompt += `\nPositionamento: ${posicionamento}`;
   if(tom) prompt += `\nTom de voz: ${tom}`;
   if(historia) prompt += `\nHistória: ${historia}`;
+  prompt += `\n\nREGRA DE OURO DO GANCHO: O gancho deve terminar em aberto — nunca complete a ideia, a comparação ou a promessa dentro da própria frase do gancho. Mesmo uma palavra final que já sugira a resposta (como completar "é isso que ela continua fazendo: se preparando") mata a curiosidade. Corte a frase no ponto exato em que o espectador precisa continuar assistindo pra saber o resto. O gancho deve abrir uma lacuna, nunca fechá-la — se a promessa já vem resolvida no texto do gancho, a pessoa não tem motivo pra continuar assistindo.`;
   if(audQuem||audSente||audDeseja||audTrava){
     prompt += `\n\nPERFIL DA AUDIÊNCIA:`;
     if(audQuem) prompt += `\nQuem ela é: ${audQuem}`;
